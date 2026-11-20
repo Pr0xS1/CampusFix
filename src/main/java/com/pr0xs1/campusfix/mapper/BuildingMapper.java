@@ -58,4 +58,19 @@ public interface BuildingMapper {
             "VALUES (#{name}, #{code}, #{campus}, #{floors}, #{status})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     int insert(Building building);
+
+    @Select("SELECT id, name, campus FROM building " +
+            "WHERE status = 1 " +
+            "ORDER BY campus ASC, name ASC")
+    List<Building> listOptions();
+
+    /**
+     * 按 id 更新楼宇；create_time / update_time 交给数据库处理
+     * @return 影响行数
+     */
+    @Update("UPDATE building SET name = #{name}, code = #{code}, campus = #{campus}, " +
+            "floors = #{floors}, status = #{status} " +
+            "WHERE id = #{id}")
+    int update(Building building);
+
 }

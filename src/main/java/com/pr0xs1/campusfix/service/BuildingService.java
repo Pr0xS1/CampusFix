@@ -3,6 +3,8 @@ package com.pr0xs1.campusfix.service;
 import com.pr0xs1.campusfix.pojo.Building;
 import com.pr0xs1.campusfix.pojo.PageResult;
 
+import java.util.List;
+
 public interface BuildingService {
     /** 分页查询建筑信息
      * @param page 当前页码
@@ -16,4 +18,10 @@ public interface BuildingService {
     void deleteById(Integer id);
 
     void add(Building building);
+
+    List<Building> listOptions();
+
+    Building getById(Integer id);
+
+    void update(Building building);
 }
