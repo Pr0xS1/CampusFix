@@ -1,0 +1,32 @@
+# ============================================================
+# 校修通 CampusFix · 配置文件模板
+# ------------------------------------------------------------
+# 用法：
+#   1. 复制本文件为 application.yml（同目录下）
+#        Windows:  copy application.yml.example application.yml
+#        Linux/Mac: cp application.yml.example application.yml
+#   2. 把下面 YOUR_xxx 的占位符换成你自己的数据库信息
+#   3. 真实的 application.yml 已在 .gitignore 中，不会被提交
+# ============================================================
+
+spring:
+  application:
+    name: CampusFix
+
+  # ---------- 数据库连接 ----------
+  datasource:
+    # 若启动报 "The server time zone value ... is unrecognized"
+    # 或 "Public Key Retrieval is not allowed"，在库名后追加连接参数：
+    # ?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+    url: "jdbc:mysql://YOUR_HOST:3306/CampusFix"
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: YOUR_USERNAME
+    password: YOUR_PASSWORD
+
+# ---------- MyBatis ----------
+mybatis:
+  configuration:
+    # 打印执行的 SQL 与参数，联调时必需；上线可删掉这一行
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    # 下划线转驼峰：create_time -> createTime，不开则时间字段全为 null
+    map-underscore-to-camel-case: true
