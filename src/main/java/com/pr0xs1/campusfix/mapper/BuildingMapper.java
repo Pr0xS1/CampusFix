@@ -8,24 +8,10 @@ import java.util.List;
 @Mapper
 public interface BuildingMapper {
     /**
-     * 查询总数
+     * 分页查询（分页交给 PageHelper，SQL 里不写 LIMIT）
      *
      * @param keyword 关键字
      * @param campus  校区
-     * @return 总数
-     */
-    @Select("SELECT COUNT(*) FROM building b WHERE 1 = 1 " +
-            "  AND (b.name LIKE CONCAT('%', #{keyword}, '%') " +
-            "    OR b.code LIKE CONCAT('%', #{keyword}, '%')) " +
-            "  AND (#{campus} = '' OR b.campus = #{campus})")
-    Long count(@Param("keyword") String keyword, @Param("campus") String campus);
-    /**
-     * 分页查询
-     *
-     * @param keyword 关键字
-     * @param campus  校区
-     * @param offset  偏移量
-     * @param pageSize 页大小
      * @return 查询结果
      */
     @Select("SELECT b.*, " +
@@ -38,8 +24,8 @@ public interface BuildingMapper {
             "  AND (b.name LIKE CONCAT('%', #{keyword}, '%') " +
             "    OR b.code LIKE CONCAT('%', #{keyword}, '%')) " +
             "  AND (#{campus} = '' OR b.campus = #{campus}) " +
-            "ORDER BY b.id ASC LIMIT #{offset}, #{pageSize}")
-    List<Building> list(@Param("keyword") String keyword, @Param("campus") String campus, @Param("offset") int offset, @Param("pageSize") Integer pageSize);
+            "ORDER BY b.id ASC")
+    List<Building> list(@Param("keyword") String keyword, @Param("campus") String campus);
 
     @Select("SELECT * FROM building WHERE id = #{id}")
     Building getById(@Param("id") Integer id);

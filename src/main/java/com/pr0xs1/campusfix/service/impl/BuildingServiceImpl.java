@@ -1,5 +1,7 @@
 package com.pr0xs1.campusfix.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.pr0xs1.campusfix.exception.BusinessException;
 import com.pr0xs1.campusfix.mapper.BuildingMapper;
 import com.pr0xs1.campusfix.pojo.Building;
@@ -9,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 @Service
 public class BuildingServiceImpl implements BuildingService {
@@ -18,17 +19,17 @@ public class BuildingServiceImpl implements BuildingService {
 
     @Override
     public PageResult pageQuery(Integer page, Integer pageSize, String keyword, String campus) {
-        keyword = (keyword == null) ? "" : keyword;
-        campus  = (campus == null) ? ""  : campus;
+        keyword = (keyword == null) ? "" : keyword.trim();
+        campus  = (campus == null) ? ""  : campus.trim();
         page = (page == null || page < 1) ? 1 : page;
         pageSize = (pageSize == null || pageSize < 1 || pageSize > 100) ? 10 : pageSize;
-        Long total = buildingMapper.count(keyword, campus);
-        if (total == null || total == 0) {
-            return new PageResult(0L, Collections.emptyList());   // 没数据就不用查第二次
-        }
-        int offset = (page - 1) * pageSize;
-        List<Building> rows = buildingMapper.list(keyword, campus, offset, pageSize);
-        return new PageResult(total, rows);
+
+        // PageHelper 用 ThreadLocal 传分页参数：startPage 之后必须紧跟这一条查询，
+        // 中间不能插任何其他 SQL，否则参数会被那条 SQL 吃掉，列表变成全表
+        PageHelper.startPage(page, pageSize);
+        List<Building> rows = buildingMapper.list(keyword, campus);
+        PageInfo<Building> info = new PageInfo<>(rows);   // 必须包 mapper 原样的 List，total 才准
+        return new PageResult(info.getTotal(), info.getList());
     }
 
     @Override

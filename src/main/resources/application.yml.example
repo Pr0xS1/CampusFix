@@ -30,3 +30,11 @@ mybatis:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     # 下划线转驼峰：create_time -> createTime，不开则时间字段全为 null
     map-underscore-to-camel-case: true
+
+# ---------- PageHelper 分页插件 ----------
+pagehelper:
+  # 方言，写死 mysql 比自动探测稳，换库时改这里
+  helper-dialect: mysql
+  # false：页码越界返回空列表（前端负责回退到最后一页）
+  # true： 越界自动改成最后一页，但需要把真实页码返回给前端才不串页
+  reasonable: false
